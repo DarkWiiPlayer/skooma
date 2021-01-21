@@ -5,6 +5,25 @@ A library to generate HTML pages in Lua using functional tools. This project is
 meant to be complementary to [MoonXML][moonxml] with a stronger focus on
 performance and hackability and less on easy and quick template writing.
 
+Why?
+----------------------------------------
+
+Because HTML sucks and most existing templating systems end up being glorified
+string interpolation.
+
+Additionally, templates usually produce text output, which is very uncomfortable
+to modify, as that requires either parsing it back into a data structure or
+doing string replacement, which can easily break if the generated HTML changes
+or is simply dynamic in general.
+
+How?
+----------------------------------------
+
+Skooma is dead simple: every function returns a tree. No side effects.
+
+After you're done applying whatever transformations to the ast, another function
+serializes it into HTML, which you can then use however you want.
+
 When should I use this?
 ----------------------------------------
 
@@ -94,4 +113,7 @@ A similar snippet in Lua:
 
 	print(serialize(tree):concat())
 
+[cosmo]: https://github.com/LuaDist/cosmo
+[etlua]: https://github.com/leafo/etlua
+[moonscript]: http://moonscript.org
 [moonxml]: http://github.com/darkwiiplayer/moonxml
