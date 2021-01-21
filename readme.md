@@ -1,10 +1,9 @@
-HTMΛ (name subject to change)
+Skooma
 ================================================================================
 
 A library to generate HTML pages in Lua using functional tools. This project is
 meant to be complementary to [MoonXML][moonxml] with a stronger focus on
 performance and hackability and less on easy and quick template writing.
-
 
 When should I use this?
 ----------------------------------------
@@ -33,11 +32,11 @@ When should I *not* use this?
 
 If you want
 
-- A simple templating format, either with just interpolation or a dedicated
-  syntax like with HAML, MoonXML, etc.
-- Template files that closely resemble the resulting HTML in their structure.
-- A way to very quickly write templates without thinking much about refactoring
-  or extracting common logic into functions/components.
+-	A simple templating format, either with just interpolation or a dedicated
+	syntax like with HAML, MoonXML, etc.
+-	Template files that closely resemble the resulting HTML in their structure.
+-	A way to very quickly write templates without thinking much about refactoring
+	or extracting common logic into functions/components.
 
 Then you'd probably be better off with a more traditional templating solution.
 A few recommendations in this case would be [MoonXML][moonxml], [Cosmo][cosmo]
