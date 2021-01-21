@@ -12,8 +12,9 @@ dependencies = {
 build = {
 	type = "builtin",
 	modules = {
+		["skooma"] = "skooma/init.lua",
 		["skooma.ast"] = "skooma/ast.lua",
 		["skooma.env"] = "skooma/env.lua",
-		["skooma.serialize"] = "skooma/serialize.lua"
+		["skooma.serialize"] = "skooma/serialize.lua",
 	}
 }
