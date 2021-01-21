@@ -42,4 +42,56 @@ Then you'd probably be better off with a more traditional templating solution.
 A few recommendations in this case would be [MoonXML][moonxml], [Cosmo][cosmo]
 and [etLua][etlua]
 
+Examples
+----------------------------------------
+
+A simple example in [Moonscript][moonscript]
+
+	env = require "skooma.env"
+	serialize = require "skooma.serialize"
+
+	map = (fn, tab) ->
+		[fn value for value in *tab]
+
+	tree ==>
+		-- Set up environment
+		_ENV = env\proxy(_G)
+		setfenv(1, _ENV) if _VERSION=="Lua 5.1"
+		-- Define some helpers
+		link = (text) -> a text, href: "/" .. string.lower text
+		list = (items) -> ul map li, map link, items
+		-- Define our actual function
+		html list {"Foo", "Bar", "Baz"}
+
+	print serialize(tree!)\concat!
+
+A similar snippet in Lua:
+
+	local env = require "skooma.env"
+	local serialize = require "skooma.serialize"
+
+	local function map(fn, tab)
+		local new = {}
+		for i, value in ipairs(tab) do
+			new[i]=fn(value)
+		end
+		return new
+	end
+
+	local tree do
+		local _ENV = env:proxy(_G)
+
+		local function link(text)
+			return a(text, {href="/"..string.lower(text)})
+		end
+
+		local function list(items)
+			return ul(map(li, map(link, items)))
+		end
+
+		tree = html(list{"Foo", "Bar", "Baz"})
+	end
+
+	print(serialize(tree):concat())
+
 [moonxml]: http://github.com/darkwiiplayer/moonxml
