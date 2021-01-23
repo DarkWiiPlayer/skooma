@@ -68,12 +68,14 @@ local function xml_tag(ast_node, buffer, ...)
 	end
 end
 
+local meta = { __index = { concat = table.concat; } }
+
 function serialize.html(ast_node, ...)
-	return serialize_tree(html_tag, ast_node, {concat = table.concat}, ...)
+	return serialize_tree(html_tag, ast_node, setmetatable({}, meta), ...)
 end
 
 function serialize.xml(ast_node, ...)
-	return serialize_tree(xml_tag, ast_node, {concat = table.concat}, ...)
+	return serialize_tree(xml_tag, ast_node, setmetatable({}, meta), ...)
 end
 
 return serialize
