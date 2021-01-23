@@ -28,15 +28,6 @@ function toattribute(element)
 	end
 end
 
--- TODO: Benchmark table.insert
-function ast.attribute_list(ast_node)
-	local buffer = {}
-	for attribute, value in ast.attributes(ast_node) do
-		table.insert(buffer, ' '..attribute..'="'..toattribute(value)..'"')
-	end
-	return table.concat(buffer)
-end
-
 function ast.insert(ast_node, subtree)
 	if type(subtree)~="table" or subtree[NAME] then
 		table.insert(ast_node, subtree)
