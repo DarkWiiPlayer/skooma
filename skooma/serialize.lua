@@ -9,7 +9,7 @@ local warn = function(...)
 	end
 end
 
-local void = {
+local html_void = {
 	area = true, base = true, br = true, col = true,
 	command = true, embed = true, hr = true, img = true,
 	input = true, keygen = true, link = true, meta = true,
