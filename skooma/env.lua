@@ -2,7 +2,7 @@ local ast = require 'skooma.ast'
 
 local NAME = ast.name
 
-local function new_env(node)
+local function env(node)
 	local meta = {}
 	function meta:__index(key)
 		self[key] = assert(node(key))
@@ -21,14 +21,4 @@ local function node(name)
 	end
 end
 
-local env = new_env(node)
-
-function env:proxy(target)
-	return setmetatable({}, {
-		__index = function(proxy, key)
-			return target[key] or self[key]
-		end
-	})
-end
-
-return env
+return env(node)
