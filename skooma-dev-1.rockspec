@@ -1,7 +1,7 @@
 package = "skooma"
 version = "dev-1"
 source = {
-	url = "git+ssh://git@github.com/darkwiiplayer/skooma"
+	url = "git+http://git@github.com/darkwiiplayer/skooma"
 }
 description = {
 	homepage = "https://github.com/darkwiiplayer/skooma",
