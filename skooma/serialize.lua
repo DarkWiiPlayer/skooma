@@ -16,6 +16,17 @@ local html_void = {
 	param = true, source = true, track = true, wbr = true
 }
 
+local function toattribute(element)
+	if type(element) == "table" then
+		return table.concat(element, " ")
+	elseif type(element) == "function" then
+		return toattribute(element())
+	else
+		return tostring(element)
+	end
+end
+
+
 -- TODO: Benchmark table.insert
 local function attribute_list(ast_node)
 	local buffer = {}

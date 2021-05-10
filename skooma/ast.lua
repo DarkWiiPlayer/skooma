@@ -18,16 +18,6 @@ function ast.attributes(ast_node)
 	return ast.next_attribute, ast_node, nil
 end
 
-function toattribute(element)
-	if type(element) == "table" then
-		return table.concat(element, " ")
-	elseif type(element) == "function" then
-		return toattribute(element())
-	else
-		return tostring(element)
-	end
-end
-
 function ast.insert(ast_node, subtree)
 	if type(subtree)~="table" or subtree[NAME] then
 		table.insert(ast_node, subtree)
