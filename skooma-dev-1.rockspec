@@ -15,6 +15,7 @@ build = {
 		["skooma"] = "skooma/init.lua",
 		["skooma.ast"] = "skooma/ast.lua",
 		["skooma.env"] = "skooma/env.lua",
+		["skooma.load"] = "skooma/load.lua",
 		["skooma.serialize"] = "skooma/serialize.lua",
 	}
 }
