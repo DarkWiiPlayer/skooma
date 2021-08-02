@@ -54,7 +54,7 @@ local function serialize_tree(serialize_tag, ast_node, buffer, ...)
 end
 
 local function html_tag(ast_node, buffer, ...)
-	local name = ast_node[NAME]
+	local name = ast_node[NAME]:gsub("%u", "-%1", 2)
 	if html_void[name] then
 		table.insert(buffer, "<"..tostring(name)..attribute_list(ast_node)..">")
 		-- TODO: Maybe error or warn when node not empty? 🤔
