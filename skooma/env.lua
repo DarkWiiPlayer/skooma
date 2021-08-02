@@ -8,7 +8,7 @@ local function env(node)
 		self[key] = assert(node(key))
 		return rawget(self, key)
 	end
-	return setmetatable({}, meta)
+	return setmetatable({require=require}, meta)
 end
 
 local function node(name)
