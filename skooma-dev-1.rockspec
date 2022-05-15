@@ -13,9 +13,9 @@ build = {
 	type = "builtin",
 	modules = {
 		["skooma"] = "skooma/init.lua",
-		["skooma.ast"] = "skooma/ast.lua",
+		["skooma.dom"] = "skooma/dom.lua",
 		["skooma.env"] = "skooma/env.lua",
 		["skooma.load"] = "skooma/load.lua",
-		["skooma.serialize"] = "skooma/serialize.lua",
+		["skooma.serialise"] = "skooma/serialise.lua",
 	}
 }

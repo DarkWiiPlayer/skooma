@@ -1,6 +1,6 @@
-local ast = require 'skooma.ast'
+local dom = require 'skooma.dom'
 
-local NAME = ast.name
+local NAME = dom.name
 
 local function env(node)
 	local meta = {}
@@ -13,11 +13,11 @@ end
 
 local function node(name)
 	return function(...)
-		local ast_node = {[NAME]=name}
+		local dom_node = {[NAME]=name}
 		for i=1,select('#', ...) do
-			ast.insert(ast_node, select(i, ...))
+			dom.insert(dom_node, select(i, ...))
 		end
-		return ast_node
+		return dom_node
 	end
 end
 

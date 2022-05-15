@@ -1,5 +1,5 @@
-local ast = require 'skooma.ast'
-local NAME = ast.name
+local dom = require 'skooma.dom'
+local NAME = dom.name
 
 local serialize = {}
 
@@ -28,51 +28,51 @@ end
 
 
 -- TODO: Benchmark table.insert
-local function attribute_list(ast_node)
+local function attribute_list(dom_node)
 	local buffer = {}
-	for attribute, value in ast.attributes(ast_node) do
+	for attribute, value in dom.attributes(dom_node) do
 		table.insert(buffer, ' '..attribute..'="'..toattribute(value)..'"')
 	end
 	return table.concat(buffer)
 end
 
 -- TODO: Benchmark table.insert
-local function serialize_tree(serialize_tag, ast_node, buffer, ...)
-	local t = type(ast_node)
-	if t=="table" and ast_node[NAME] then
-		serialize_tag(ast_node, buffer, ...)
+local function serialize_tree(serialize_tag, dom_node, buffer, ...)
+	local t = type(dom_node)
+	if t=="table" and dom_node[NAME] then
+		serialize_tag(dom_node, buffer, ...)
 	elseif t=="table" then
-		for i, child in ipairs(ast_node) do
+		for i, child in ipairs(dom_node) do
 			serialize_tree(serialize_tag, child, buffer, ...)
 		end
 	elseif t=="function" then
-		return serialize_tree(serialize_tag, ast_node(), buffer, ...)
+		return serialize_tree(serialize_tag, dom_node(), buffer, ...)
 	else
-		table.insert(buffer, tostring(ast_node))
+		table.insert(buffer, tostring(dom_node))
 	end
 	return buffer
 end
 
-local function html_tag(ast_node, buffer, ...)
-	local name = ast_node[NAME]:gsub("%u", "-%1", 2)
+local function html_tag(dom_node, buffer, ...)
+	local name = dom_node[NAME]:gsub("%u", "-%1", 2)
 	if html_void[name] then
-		table.insert(buffer, "<"..tostring(name)..attribute_list(ast_node)..">")
+		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		-- TODO: Maybe error or warn when node not empty? 🤔
 	else
-		table.insert(buffer, "<"..tostring(name)..attribute_list(ast_node)..">")
-		for i, child in ipairs(ast_node) do
+		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
+		for i, child in ipairs(dom_node) do
 			serialize_tree(html_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">") end
 end
 
-local function xml_tag(ast_node, buffer, ...)
-	local name = ast_node[NAME]
-	if 0 == #ast_node then
-		table.insert(buffer, "<"..tostring(name)..attribute_list(ast_node).."/>")
+local function xml_tag(dom_node, buffer, ...)
+	local name = dom_node[NAME]
+	if 0 == #dom_node then
+		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node).."/>")
 	else
-		table.insert(buffer, "<"..tostring(name)..attribute_list(ast_node)..">")
-		for i, child in ipairs(ast_node) do
+		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
+		for i, child in ipairs(dom_node) do
 			serialize_tree(xml_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">")
@@ -81,12 +81,12 @@ end
 
 local meta = { __index = { concat = table.concat; } }
 
-function serialize.html(ast_node, ...)
-	return serialize_tree(html_tag, ast_node, setmetatable({}, meta), ...)
+function serialize.html(dom_node, ...)
+	return serialize_tree(html_tag, dom_node, setmetatable({}, meta), ...)
 end
 
-function serialize.xml(ast_node, ...)
-	return serialize_tree(xml_tag, ast_node, setmetatable({}, meta), ...)
+function serialize.xml(dom_node, ...)
+	return serialize_tree(xml_tag, dom_node, setmetatable({}, meta), ...)
 end
 
 return serialize
