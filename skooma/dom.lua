@@ -22,7 +22,7 @@ function dom.insert(dom_node, subtree)
 	if type(subtree)~="table" or subtree[NAME] then
 		table.insert(dom_node, subtree)
 	else
-		for index, element in ipairs(subtree) do
+		for _, element in ipairs(subtree) do
 			dom.insert(dom_node, element)
 		end
 		for key, value in dom.attributes(subtree) do

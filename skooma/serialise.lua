@@ -3,12 +3,6 @@ local NAME = dom.name
 
 local serialize = {}
 
-local warn = function(...)
-	if warn then
-		warn(...)
-	end
-end
-
 local html_void = {
 	area = true, base = true, br = true, col = true,
 	command = true, embed = true, hr = true, img = true,
@@ -42,7 +36,7 @@ local function serialize_tree(serialize_tag, dom_node, buffer, ...)
 	if t=="table" and dom_node[NAME] then
 		serialize_tag(dom_node, buffer, ...)
 	elseif t=="table" then
-		for i, child in ipairs(dom_node) do
+		for _, child in ipairs(dom_node) do
 			serialize_tree(serialize_tag, child, buffer, ...)
 		end
 	elseif t=="function" then
@@ -60,7 +54,7 @@ local function html_tag(dom_node, buffer, ...)
 		-- TODO: Maybe error or warn when node not empty? 🤔
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
-		for i, child in ipairs(dom_node) do
+		for _, child in ipairs(dom_node) do
 			serialize_tree(html_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">") end
@@ -72,7 +66,7 @@ local function xml_tag(dom_node, buffer, ...)
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node).."/>")
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
-		for i, child in ipairs(dom_node) do
+		for _, child in ipairs(dom_node) do
 			serialize_tree(xml_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">")
