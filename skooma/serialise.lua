@@ -1,7 +1,7 @@
 local dom = require 'skooma.dom'
 local NAME = dom.name
 
-local serialize = {}
+local serialise = {}
 
 local html_void = {
 	area = true, base = true, br = true, col = true,
@@ -31,16 +31,16 @@ local function attribute_list(dom_node)
 end
 
 -- TODO: Benchmark table.insert
-local function serialize_tree(serialize_tag, dom_node, buffer, ...)
+local function serialise_tree(serialise_tag, dom_node, buffer, ...)
 	local t = type(dom_node)
 	if t=="table" and dom_node[NAME] then
-		serialize_tag(dom_node, buffer, ...)
+		serialise_tag(dom_node, buffer, ...)
 	elseif t=="table" then
 		for _, child in ipairs(dom_node) do
-			serialize_tree(serialize_tag, child, buffer, ...)
+			serialise_tree(serialise_tag, child, buffer, ...)
 		end
 	elseif t=="function" then
-		return serialize_tree(serialize_tag, dom_node(), buffer, ...)
+		return serialise_tree(serialise_tag, dom_node(), buffer, ...)
 	else
 		table.insert(buffer, tostring(dom_node))
 	end
@@ -55,7 +55,7 @@ local function html_tag(dom_node, buffer, ...)
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		for _, child in ipairs(dom_node) do
-			serialize_tree(html_tag, child, buffer, ...)
+			serialise_tree(html_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">") end
 end
@@ -67,7 +67,7 @@ local function xml_tag(dom_node, buffer, ...)
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		for _, child in ipairs(dom_node) do
-			serialize_tree(xml_tag, child, buffer, ...)
+			serialise_tree(xml_tag, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">")
 	end
@@ -75,12 +75,12 @@ end
 
 local meta = { __index = { concat = table.concat; } }
 
-function serialize.html(dom_node, ...)
-	return serialize_tree(html_tag, dom_node, setmetatable({}, meta), ...)
+function serialise.html(dom_node, ...)
+	return serialise_tree(html_tag, dom_node, setmetatable({}, meta), ...)
 end
 
-function serialize.xml(dom_node, ...)
-	return serialize_tree(xml_tag, dom_node, setmetatable({}, meta), ...)
+function serialise.xml(dom_node, ...)
+	return serialise_tree(xml_tag, dom_node, setmetatable({}, meta), ...)
 end
 
-return serialize
+return serialise

@@ -1,24 +1,12 @@
 local dom = require 'skooma.dom'
 
-local NAME = dom.name
-
-local function env(node)
+local function env(format)
 	local meta = {}
 	function meta:__index(key)
-		self[key] = assert(node(key))
+		self[key] = assert(dom.node(key, format))
 		return rawget(self, key)
 	end
-	return setmetatable({require=require}, meta)
+	return setmetatable({}, meta)
 end
 
-local function node(name)
-	return function(...)
-		local dom_node = {[NAME]=name}
-		for i=1,select('#', ...) do
-			dom.insert(dom_node, select(i, ...))
-		end
-		return dom_node
-	end
-end
-
-return env(node)
+return env
