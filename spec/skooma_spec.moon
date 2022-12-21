@@ -9,13 +9,17 @@ describe 'skooma', ->
 		pending 'proxy', ->
 		it 'returns DOM nodes', ->
 			assert.is.equal "h1", gen.h1![NAME]
-		pending 'handles nested table arguments'
+		pending 'handles nested table arguments', ->
 	
 	describe 'serialiser', ->
-		it 'returns a table', ->
 		it 'treats empty XML tags correctly', ->
 			assert.is.equal '<div><span/></div>',
 				skooma.serialise.xml(gen.div(gen.span))\concat!
+		it 'treats empty HTML tags correctly', ->
+			assert.is.equal '<div></div>',
+				skooma.serialise.html(gen.div())\concat!
+			assert.is.equal '<br>',
+				skooma.serialise.html(gen.br())\concat!
 		it 'concatenates attribute sequences', ->
 			assert.is.equal '<span class="foo bar baz"/>',
 				skooma.serialise.xml(gen.span(class: {"foo", "bar", "baz"}))\concat!
