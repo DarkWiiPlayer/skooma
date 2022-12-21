@@ -8,6 +8,13 @@ spooder.task "install" {
 	end;
 }
 
+spooder.task "clean" {
+	description = "Deletes buildt leftovers";
+	'rm -rf luacov-html';
+	'rm -f luacov.report.out';
+	'rm -f luacov.stats.out';
+}
+
 spooder.task "test" {
 	description = "Runs tests";
 	'rm luacov.stats.out || true';
