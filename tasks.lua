@@ -1,21 +1,19 @@
-local spooder = require 'spooder'
+local task = require 'spooder' .task
 
-spooder.task "install" {
+task.install {
 	description = "Installs the rock";
-	depends = {"test"};
-	function(helper)
-		helper.run("luarocks make")
-	end;
+	depends = "test";
+	'luarocks make';
 }
 
-spooder.task "clean" {
+task.clean {
 	description = "Deletes buildt leftovers";
 	'rm -rf luacov-html';
 	'rm -f luacov.report.out';
 	'rm -f luacov.stats.out';
 }
 
-spooder.task "test" {
+task.test {
 	description = "Runs tests";
 	'rm luacov.stats.out || true';
 	'luacheck .';
@@ -23,7 +21,7 @@ spooder.task "test" {
 	'luacov -r html skooma.lua';
 }
 
-spooder.task "documentation" {
+task.documentation {
 	description = "Builds and pushes the documentation";
 	depends = { "test"};
 	[[
