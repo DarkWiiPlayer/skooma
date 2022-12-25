@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Functions">Functions</a></li>
+<li><a href="#Tables">Tables</a></li>
+</ul>
+
+
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><strong>skooma.dom</strong></li>
+  <li><a href="../modules/skooma.env.html">skooma.env</a></li>
+  <li><a href="../modules/skooma.html">skooma</a></li>
+  <li><a href="../modules/skooma.serialise.html">skooma.serialise</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/skooma.slotty.html">skooma.slotty</a></li>
+</ul>
+<h2>Topics</h2>
+<ul class="">
+  <li><a href="../topics/readme.md.html">readme</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+<h1>Module <code>skooma.dom</code></h1>
+<p>Simple DOM generation library</p>
+<p>
+</p>
+
+
+<h2><a href="#Functions">Functions</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#render">render (node)</a></td>
+	<td class="summary">Renders a dom node</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#next_attribute">next_attribute (node, previous)</a></td>
+	<td class="summary">Like <a href="https://www.lua.org/manual/5.1/manual.html#pdf-next">next</a>, but for <a href="../modules/skooma.dom.html#node">node</a> attributes (string keys).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#attributes">attributes (node)</a></td>
+	<td class="summary">like <a href="https://www.lua.org/manual/5.1/manual.html#pdf-pairs">pairs</a> but for <a href="../modules/skooma.dom.html#node">node</a> attributes (string keys).</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#insert">insert (node, subtree)</a></td>
+	<td class="summary">Inserts a subtree into a node.</td>
+	</tr>
+	<tr>
+	<td class="name" nowrap><a href="#node">node (name, format)</a></td>
+	<td class="summary">Creates a new DOM node.</td>
+	</tr>
+</table>
+<h2><a href="#Tables">Tables</a></h2>
+<table class="function_list">
+	<tr>
+	<td class="name" nowrap><a href="#node">node</a></td>
+	<td class="summary">Table representing a DOM node.</td>
+	</tr>
+</table>
+
+<br/>
+<br/>
+
+
+    <h2 class="section-header "><a name="Functions"></a>Functions</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "render"></a>
+    <strong>render (node)</strong>
+    </dt>
+    <dd>
+    Renders a dom node
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">node</span>
+            <span class="types"><a class="type" href="../modules/skooma.dom.html#node">node</a></span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "next_attribute"></a>
+    <strong>next_attribute (node, previous)</strong>
+    </dt>
+    <dd>
+    Like <a href="https://www.lua.org/manual/5.1/manual.html#pdf-next">next</a>, but for <a href="../modules/skooma.dom.html#node">node</a> attributes (string keys).
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">node</span>
+
+
+        </li>
+        <li><span class="parameter">previous</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "attributes"></a>
+    <strong>attributes (node)</strong>
+    </dt>
+    <dd>
+    like <a href="https://www.lua.org/manual/5.1/manual.html#pdf-pairs">pairs</a> but for <a href="../modules/skooma.dom.html#node">node</a> attributes (string keys).
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">node</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "insert"></a>
+    <strong>insert (node, subtree)</strong>
+    </dt>
+    <dd>
+    Inserts a subtree into a node.
+ Non-table values and <a href="../modules/skooma.dom.html#node">node</a>s are inserted as-is.
+ Tables are iterated and their integer keys are inserted into the
+ given node in order while string keys are set as attributes.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">node</span>
+
+
+        </li>
+        <li><span class="parameter">subtree</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+    <dt>
+    <a name = "node"></a>
+    <strong>node (name, format)</strong>
+    </dt>
+    <dd>
+    Creates a new DOM node.
+
+
+    <h3>Parameters:</h3>
+    <ul>
+        <li><span class="parameter">name</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Tag name of the new node
+        </li>
+        <li><span class="parameter">format</span>
+            <span class="types"><a class="type" href="https://www.lua.org/manual/5.1/manual.html#5.4">string</a></span>
+         Serialisation format of the new node (html, xml, etc.).
+ Defaults to whatever is set in the environment, or &lsquo;xml&rsquo; if nothing is set.
+        </li>
+    </ul>
+
+
+
+
+
+</dd>
+</dl>
+    <h2 class="section-header "><a name="Tables"></a>Tables</h2>
+
+    <dl class="function">
+    <dt>
+    <a name = "node"></a>
+    <strong>node</strong>
+    </dt>
+    <dd>
+    Table representing a DOM node.
+ Integer keys are child elements.
+ String keys are properties.
+ The special tokens <code>dom.name</code> and <code>dom.format</code> serve as keys
+ for the nodes name and its format (html, xml, etc.) respectively.
+
+
+
+
+
+
+
+</dd>
+</dl>
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-12-26 00:16:42 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>

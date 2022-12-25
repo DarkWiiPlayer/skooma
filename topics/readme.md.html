@@ -1,0 +1,177 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>Reference</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>ldoc</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><strong>readme</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/skooma.dom.html">skooma.dom</a></li>
+  <li><a href="../modules/skooma.env.html">skooma.env</a></li>
+  <li><a href="../modules/skooma.html">skooma</a></li>
+  <li><a href="../modules/skooma.serialise.html">skooma.serialise</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/skooma.slotty.html">skooma.slotty</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+    <h1>Skooma</h1>
+
+<p>A functional library for HTML and XML generation in Lua.</p>
+
+<h2>Why?</h2>
+
+<p>Because HTML sucks and most existing templating systems end up being glorified
+string interpolation. This means you're still writing HTML at the end of the
+day.</p>
+
+<p>Additionally, HTML and XML are not trivial to parse, so transforming it is a
+lot easier with a simplified DOM-like tree structure than in text form.</p>
+
+<h2>How?</h2>
+
+<p>Skooma is dead simple: every function returns a tree. No side effects.</p>
+
+<p>After you're done applying whatever transformations to the ast, another function
+serializes it into HTML, which you can then use however you want.</p>
+
+<h2>When should I use this?</h2>
+
+<p>Whenever you:</p>
+
+<ul>
+<li>Want to avoid writing actual HTML at all costs</li>
+<li>Want to further transform your HTML structure before sending it to a user</li>
+<li>Want to build small re-usable components close to where they're used</li>
+</ul>
+
+
+<h2>When should I <em>not</em> use this?</h2>
+
+<p>If you want</p>
+
+<ul>
+<li>Logic-less templating that you can trust your users with</li>
+<li>A simple and close-to-html templating language that you can learn easily</li>
+<li>Pain</li>
+</ul>
+
+
+<p>Then you'd probably be better off with a more traditional templating solution.
+A few recommendations in this case would be <a href="https://github.com/Olivine-Labs/lustache">Lustache</a>, <a href="https://github.com/LuaDist/cosmo">Cosmo</a>
+and <a href="https://github.com/leafo/etlua">etLua</a></p>
+
+<h2>Examples</h2>
+
+<p>A simple example in <a href="http://moonscript.org">Moonscript</a></p>
+
+<pre>
+skooma = <span class="global">require</span> <span class="string">'skooma'</span>
+html = skooma.env <span class="string">'html'</span>
+
+link = (text) -&gt; html.a text, href: <span class="string">"/#{text\lower!}"</span>
+list = (items) -&gt; html.ul [html.li link item <span class="keyword">for</span> item <span class="keyword">in</span> *items]
+tree = html.html list {<span class="string">"Foo"</span>, <span class="string">"Bar"</span>, <span class="string">"Baz"</span>}
+
+<span class="global">print</span> <span class="global">tostring</span> tree
+</pre>
+
+
+<p>A similar snippet in Lua:</p>
+
+<pre>
+<span class="keyword">local</span> skooma = <span class="global">require</span> <span class="string">'skooma'</span>
+<span class="keyword">local</span> html = skooma.env <span class="string">'html'</span>
+
+<span class="keyword">local</span> <span class="keyword">function</span> map(fn, tab)
+    <span class="keyword">local</span> new = {}
+    <span class="keyword">for</span> i, value <span class="keyword">in</span> <span class="global">ipairs</span>(tab) <span class="keyword">do</span>
+        new[i]=fn(value)
+    <span class="keyword">end</span>
+    <span class="keyword">return</span> new
+<span class="keyword">end</span>
+
+<span class="keyword">local</span> tree <span class="keyword">do</span>
+    <span class="keyword">local</span> <span class="keyword">function</span> link(text)
+        <span class="keyword">return</span> html.a(text, {href=<span class="string">"/"</span>..<span class="global">string</span>.lower(text)})
+    <span class="keyword">end</span>
+
+    <span class="keyword">local</span> <span class="keyword">function</span> list(items)
+        <span class="keyword">return</span> html.ul(
+            map(html.li, map(link, items))
+        )
+    <span class="keyword">end</span>
+
+    tree = html.html(list{<span class="string">"Foo"</span>, <span class="string">"Bar"</span>, <span class="string">"Baz"</span>})
+<span class="keyword">end</span>
+
+<span class="global">print</span>(<span class="global">tostring</span>(tree))
+</pre>
+
+
+<p>The resulting HTML, formatted a bit, should look something like this:</p>
+
+<pre>
+&lt;html&gt;
+    &lt;ul&gt;
+        &lt;li&gt;
+            &lt;a href=<span class="string">"/foo"</span>&gt;Foo&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=<span class="string">"/bar"</span>&gt;Bar&lt;/a&gt;
+        &lt;/li&gt;
+        &lt;li&gt;
+            &lt;a href=<span class="string">"/baz"</span>&gt;Baz&lt;/a&gt;
+        &lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/html&gt;
+</pre>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2022-12-26 00:16:42 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
