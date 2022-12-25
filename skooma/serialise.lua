@@ -57,7 +57,7 @@ end
 
 --- Serialises an HTML tag
 local function html_tag(dom_node, buffer, ...)
-	local name = dom_node[NAME]:gsub("%u", "-%1", 2)
+	local name = dom_node[NAME]:gsub("%u", "-%1", 2):lower()
 	if html_void[name] then
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		-- TODO: Maybe error or warn when node not empty? 🤔
