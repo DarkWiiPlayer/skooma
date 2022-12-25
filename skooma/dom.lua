@@ -11,7 +11,13 @@ function dom.render(dom_node, format)
 	return serialise[format](dom_node)
 end
 
-dom.meta = {__index = dom, __call=dom.render}
+dom.meta = {
+	__index = dom,
+	__call=dom.render,
+	__tostring=function(self)
+		return table.concat(dom.render(self))
+	end
+}
 
 function dom.next_attribute(dom_node, previous)
 	local key, value = next(dom_node, previous)
