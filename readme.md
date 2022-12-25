@@ -1,20 +1,17 @@
 Skooma
 ================================================================================
 
-A library to generate HTML pages in Lua using functional tools. This project is
-meant to be complementary to [MoonXML][moonxml] with a stronger focus on
-performance and hackability and less on easy and quick template writing.
+A functional library for HTML and XML generation in Lua.
 
 Why?
 ----------------------------------------
 
 Because HTML sucks and most existing templating systems end up being glorified
-string interpolation.
+string interpolation. This means you're still writing HTML at the end of the
+day.
 
-Additionally, templates usually produce text output, which is very uncomfortable
-to modify, as that requires either parsing it back into a data structure or
-doing string replacement, which can easily break if the generated HTML changes
-or is simply dynamic in general.
+Additionally, HTML and XML are not trivial to parse, so transforming it is a
+lot easier with a simplified DOM-like tree structure than in text form.
 
 How?
 ----------------------------------------
@@ -27,38 +24,23 @@ serializes it into HTML, which you can then use however you want.
 When should I use this?
 ----------------------------------------
 
-When you feel like your project has outgrown a simplistic approach on
-templating, for either performance-related or architectural reasons. The benefit
-when compared to a more traditional templating solution is the separation into
-two steps:
+Whenever you:
 
-1. Building an AST
-2. Serializing into HTML
-
-In between those two steps, one can easily apply additional transformations to
-the structure (think middleware) without having to resort to string-manipulation
-and HTML parsing.
-
-Turning "templates" into (pure) Lua functions allows building re-usable
-components that hide HTML semantics behind higher-level concepts. Imagine, for a
-very basic example, a function `list(items, ordered)` that takes a sequence of
-items and outputs either an `<ul>` or `<ol>` node with all items wrapped in an
-`<li>`. More complex examples could be `post(title, text)`, `menu(sitemap)`,
-etc.
+- Want to avoid writing actual HTML at all costs
+- Want to further transform your HTML structure before sending it to a user
+- Want to build small re-usable components close to where they're used
 
 When should I *not* use this?
 ----------------------------------------
 
 If you want
 
--	A simple templating format, either with just interpolation or a dedicated
-	syntax like with HAML, MoonXML, etc.
--	Template files that closely resemble the resulting HTML in their structure.
--	A way to very quickly write templates without thinking much about refactoring
-	or extracting common logic into functions/components.
+- Logic-less templating that you can trust your users with
+- A simple and close-to-html templating language that you can learn easily
+- Pain
 
 Then you'd probably be better off with a more traditional templating solution.
-A few recommendations in this case would be [MoonXML][moonxml], [Cosmo][cosmo]
+A few recommendations in this case would be [Lustache][lustache], [Cosmo][cosmo]
 and [etLua][etlua]
 
 Examples
@@ -66,28 +48,19 @@ Examples
 
 A simple example in [Moonscript][moonscript]
 
-	env = require "skooma.env"
-	serialize = require "skooma.serialize"
+	skooma = require 'skooma'
+	html = skooma.env 'html'
 
-	map = (fn, tab) ->
-		[fn value for value in *tab]
+	link = (text) -> html.a text, href: "/#{text\lower!}"
+	list = (items) -> html.ul [html.li link item for item in *items]
+	tree = html.html list {"Foo", "Bar", "Baz"}
 
-	tree ==>
-		-- Set up environment
-		_ENV = env\proxy(_G)
-		setfenv(1, _ENV) if _VERSION=="Lua 5.1"
-		-- Define some helpers
-		link = (text) -> a text, href: "/" .. string.lower text
-		list = (items) -> ul map li, map link, items
-		-- Define our actual function
-		html list {"Foo", "Bar", "Baz"}
-
-	print serialize(tree!)\concat!
+	print tostring tree
 
 A similar snippet in Lua:
 
-	local env = require "skooma.env"
-	local serialize = require "skooma.serialize"
+	local skooma = require 'skooma'
+	local html = skooma.env 'html'
 
 	local function map(fn, tab)
 		local new = {}
@@ -98,22 +71,39 @@ A similar snippet in Lua:
 	end
 
 	local tree do
-		local _ENV = env:proxy(_G)
-
 		local function link(text)
-			return a(text, {href="/"..string.lower(text)})
+			return html.a(text, {href="/"..string.lower(text)})
 		end
 
 		local function list(items)
-			return ul(map(li, map(link, items)))
+			return html.ul(
+				map(html.li, map(link, items))
+			)
 		end
 
-		tree = html(list{"Foo", "Bar", "Baz"})
+		tree = html.html(list{"Foo", "Bar", "Baz"})
 	end
 
-	print(serialize(tree):concat())
+	print(tostring(tree))
+
+The resulting HTML, formatted a bit, should look something like this:
+
+	<html>
+		<ul>
+			<li>
+				<a href="/foo">Foo</a>
+			</li>
+			<li>
+				<a href="/bar">Bar</a>
+			</li>
+			<li>
+				<a href="/baz">Baz</a>
+			</li>
+		</ul>
+	</html>
 
 [cosmo]: https://github.com/LuaDist/cosmo
 [etlua]: https://github.com/leafo/etlua
 [moonscript]: http://moonscript.org
 [moonxml]: http://github.com/darkwiiplayer/moonxml
+[lustache]: https://github.com/Olivine-Labs/lustache
