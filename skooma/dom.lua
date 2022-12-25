@@ -1,14 +1,27 @@
+--- Simple DOM generation library
+-- @module skooma.dom
+
 local dom = {}
 
 dom.name = {token="Unique token to store a tag name"}
 local NAME = dom.name
+
 dom.format = {token="Unique token to stora a tags format"}
 local FORMAT = dom.format
 
-function dom.render(dom_node, format)
+--- Table representing a DOM node.
+-- Integer keys are child elements.
+-- String keys are properties.
+-- The special tokens `dom.name` and `dom.format` serve as keys
+-- for the nodes name and its format (html, xml, etc.) respectively.
+-- @table node
+
+--- Renders a dom node
+-- @tparam node node
+function dom.render(node, format)
 	local serialise = require 'skooma.serialise'
-	format = format or dom_node[FORMAT] or 'xml'
-	return serialise[format](dom_node)
+	format = format or node[FORMAT] or 'xml'
+	return serialise[format](node)
 end
 
 dom.meta = {
@@ -19,41 +32,51 @@ dom.meta = {
 	end
 }
 
-function dom.next_attribute(dom_node, previous)
-	local key, value = next(dom_node, previous)
+--- Like `next`, but for `node` attributes (string keys).
+function dom.next_attribute(node, previous)
+	local key, value = next(node, previous)
 	if key then
 		if type(key)=="string" then
 			return key, value
 		else
-			return dom.next_attribute(dom_node, key)
+			return dom.next_attribute(node, key)
 		end
 	end
 end
 
-function dom.attributes(dom_node)
-	return dom.next_attribute, dom_node, nil
+--- like `pairs` but for `node` attributes (string keys).
+function dom.attributes(node)
+	return dom.next_attribute, node, nil
 end
 
-function dom.insert(dom_node, subtree)
+--- Inserts a subtree into a node.
+-- Non-table values and `node`s are inserted as-is.
+-- Tables are iterated and their integer keys are inserted into the
+-- given node in order while string keys are set as attributes.
+function dom.insert(node, subtree)
 	if type(subtree)~="table" or subtree[NAME] then
-		table.insert(dom_node, subtree)
+		table.insert(node, subtree)
 	else
 		for _, element in ipairs(subtree) do
-			dom.insert(dom_node, element)
+			dom.insert(node, element)
 		end
 		for key, value in dom.attributes(subtree) do
-			dom_node[key]=value
+			node[key]=value
 		end
 	end
 end
 
+--- Creates a new DOM node.
+-- @tparam string name Tag name of the new node
+-- @tparam string format Serialisation format of the new node (html, xml, etc.).
+-- Defaults to whatever is set in the environment, or 'xml' if nothing is set.
 function dom.node(name, format)
 	return function(...)
-		local dom_node = setmetatable({[NAME]=name, [FORMAT]=format}, dom.meta)
+		local node = setmetatable({[NAME]=name, [FORMAT]=format}, dom.meta)
 		for i=1,select('#', ...) do
-			dom.insert(dom_node, select(i, ...))
+			dom.insert(node, select(i, ...))
 		end
-		return dom_node
+		return node
 	end
 end
 
