@@ -1,5 +1,3 @@
-package.path = "?.lua;?/init.lua;" .. package.path
-
 skooma = require 'skooma'
 xml = skooma.env!
 html = skooma.env 'html'

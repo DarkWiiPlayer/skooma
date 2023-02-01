@@ -54,7 +54,7 @@ end
 -- Tables are iterated and their integer keys are inserted into the
 -- given node in order while string keys are set as attributes.
 function dom.insert(node, subtree)
-	if type(subtree)~="table" or subtree[NAME] then
+	if type(subtree)~="table" or subtree[NAME] or subtree[NAME]==false then
 		table.insert(node, subtree)
 	else
 		for _, element in ipairs(subtree) do

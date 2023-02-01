@@ -17,6 +17,7 @@
 -- 	print(tostring(documnet))
 
 local slot = {}
+local NAME = require('skooma').dom.name
 
 local __slot = {__index=slot}
 
@@ -32,7 +33,7 @@ end
 local __slotty = {}
 
 function __slotty:__index(key)
-	self[key] = setmetatable({}, __slot)
+	self[key] = setmetatable({[NAME]=false}, __slot)
 	return self[key]
 end
 
