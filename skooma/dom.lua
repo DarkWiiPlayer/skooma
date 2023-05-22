@@ -5,8 +5,11 @@ local dom = {}
 
 dom.name = {token="Unique token to store a tag name"}
 local NAME = dom.name
-function dom.escape(...)
-	return { [NAME] = dom.escape, ... }
+
+--- Creates a new raw string object.
+-- Raw strings will not be escaped by the serialiser and instead inserted as is.
+function dom.raw(...)
+	return { [NAME] = dom.raw, ... }
 end
 
 dom.format = {token="Unique token to stora a tags format"}

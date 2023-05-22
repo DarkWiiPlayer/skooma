@@ -4,7 +4,7 @@
 
 local dom = require 'skooma.dom'
 local NAME = dom.name
-local ESCAPE = dom.escape
+local RAW = dom.raw
 
 local serialise = {}
 
@@ -43,9 +43,9 @@ end
 local function serialise_tree(serialise_tag, escape, dom_node, buffer, ...)
 	local t = type(dom_node)
 	if t=="table" and dom_node[NAME] then
-		if dom_node[NAME] == ESCAPE then
+		if dom_node[NAME] == RAW then
 			for _, str in ipairs(dom_node) do
-				table.insert(buffer, escape(str))
+				table.insert(buffer, tostring(str))
 			end
 		else
 			serialise_tag(dom_node, buffer, ...)
@@ -57,7 +57,7 @@ local function serialise_tree(serialise_tag, escape, dom_node, buffer, ...)
 	elseif t=="function" then
 		return serialise_tree(serialise_tag, escape, dom_node(), buffer, ...)
 	else
-		table.insert(buffer, tostring(dom_node))
+		table.insert(buffer, escape(tostring(dom_node)))
 	end
 	return buffer
 end

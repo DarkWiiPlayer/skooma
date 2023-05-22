@@ -22,7 +22,7 @@ local function env(format)
 		return rawget(self, key)
 	end
 	return setmetatable({
-		escape = dom.escape
+		raw = dom.raw
 	}, meta)
 end
 
