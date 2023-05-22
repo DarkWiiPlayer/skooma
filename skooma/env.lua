@@ -21,7 +21,9 @@ local function env(format)
 		self[key] = assert(dom.node(key, format))
 		return rawget(self, key)
 	end
-	return setmetatable({}, meta)
+	return setmetatable({
+		escape = dom.escape
+	}, meta)
 end
 
 return env

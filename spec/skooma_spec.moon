@@ -5,9 +5,11 @@ NAME = skooma.dom.name
 
 describe 'skooma', ->
 	describe 'environment', ->
-		pending 'proxy', ->
 		it 'returns DOM nodes', ->
 			assert.is.equal "h1", xml.h1![NAME]
+		it 'has an escape function', ->
+			assert.is.function xml.escape
+			assert.same { [NAME]: skooma.dom.escape, 'foo' }, xml.escape 'foo'
 		pending 'handles nested table arguments', ->
 	
 	describe 'serialiser', ->
@@ -31,6 +33,13 @@ describe 'skooma', ->
 					xml.span(class: {"foo", "bar", "baz"})\render('xml')\concat!
 				assert.is.equal '<span class="foo bar baz"></span>',
 					xml.span(class: {"foo", "bar", "baz"})\render('html')\concat!
+			it 'does not escape normal strings', ->
+				for lang in *{'xml', 'html'}
+					assert.is.equal '<span><div></span>',
+						xml.span('<div>')\render(lang)\concat!
+			it 'escapes marked strings', ->
+				assert.is.equal '<span>&lt;div&gt;</span>',
+					xml.span(xml.escape("<div>"))\render('html')\concat!
 			it 'defaults to xml', -> -- TODO: Find a nice way of switching defaults
 				assert.is.equal '<span class="foo bar baz"/>',
 					xml.span(class: {"foo", "bar", "baz"})\render!\concat!

@@ -4,6 +4,7 @@
 
 local dom = require 'skooma.dom'
 local NAME = dom.name
+local ESCAPE = dom.escape
 
 local serialise = {}
 
@@ -39,21 +40,36 @@ end
 
 --- Recursively serialises a DOM tree.
 -- @todo Benchmark table.insert
-local function serialise_tree(serialise_tag, dom_node, buffer, ...)
+local function serialise_tree(serialise_tag, escape, dom_node, buffer, ...)
 	local t = type(dom_node)
 	if t=="table" and dom_node[NAME] then
-		serialise_tag(dom_node, buffer, ...)
+		if dom_node[NAME] == ESCAPE then
+			for _, str in ipairs(dom_node) do
+				table.insert(buffer, escape(str))
+			end
+		else
+			serialise_tag(dom_node, buffer, ...)
+		end
 	elseif t=="table" then
 		for _, child in ipairs(dom_node) do
-			serialise_tree(serialise_tag, child, buffer, ...)
+			serialise_tree(serialise_tag, escape, child, buffer, ...)
 		end
 	elseif t=="function" then
-		return serialise_tree(serialise_tag, dom_node(), buffer, ...)
+		return serialise_tree(serialise_tag, escape, dom_node(), buffer, ...)
 	else
 		table.insert(buffer, tostring(dom_node))
 	end
 	return buffer
 end
+
+--- Excape a string for XML output
+local function xml_escape(input)
+	return (tostring(input):gsub("[<>]", {
+		["<"] = "&lt;";
+		[">"] = "&gt;";
+	}))
+end
+local html_escape = xml_escape
 
 --- Serialises an HTML tag
 local function html_tag(dom_node, buffer, ...)
@@ -64,7 +80,7 @@ local function html_tag(dom_node, buffer, ...)
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		for _, child in ipairs(dom_node) do
-			serialise_tree(html_tag, child, buffer, ...)
+			serialise_tree(html_tag, html_escape, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">") end
 end
@@ -77,7 +93,7 @@ local function xml_tag(dom_node, buffer, ...)
 	else
 		table.insert(buffer, "<"..tostring(name)..attribute_list(dom_node)..">")
 		for _, child in ipairs(dom_node) do
-			serialise_tree(xml_tag, child, buffer, ...)
+			serialise_tree(xml_tag, xml_escape, child, buffer, ...)
 		end
 		table.insert(buffer, "</"..tostring(name)..">")
 	end
@@ -87,12 +103,12 @@ local meta = { __index = { concat = table.concat; } }
 
 --- Serialises an HTML btree
 function serialise.html(dom_node, ...)
-	return serialise_tree(html_tag, dom_node, setmetatable({}, meta), ...)
+	return serialise_tree(html_tag, html_escape, dom_node, setmetatable({}, meta), ...)
 end
 
 --- Serialises an XML tree
 function serialise.xml(dom_node, ...)
-	return serialise_tree(xml_tag, dom_node, setmetatable({}, meta), ...)
+	return serialise_tree(xml_tag, xml_escape, dom_node, setmetatable({}, meta), ...)
 end
 
 return serialise

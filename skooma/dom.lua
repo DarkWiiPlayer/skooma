@@ -5,6 +5,9 @@ local dom = {}
 
 dom.name = {token="Unique token to store a tag name"}
 local NAME = dom.name
+function dom.escape(...)
+	return { [NAME] = dom.escape, ... }
+end
 
 dom.format = {token="Unique token to stora a tags format"}
 local FORMAT = dom.format

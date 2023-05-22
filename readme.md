@@ -46,16 +46,19 @@ and [etLua][etlua]
 Examples
 ----------------------------------------
 
-A simple example in [Moonscript][moonscript]
+A simple example in [Yuescript][yuescript]
 
 	skooma = require 'skooma'
 	html = skooma.env 'html'
 
-	link = (text) -> html.a text, href: "/#{text\lower!}"
-	list = (items) -> html.ul [html.li link item for item in *items]
-	tree = html.html list {"Foo", "Bar", "Baz"}
+	link = => html.a @, href: "/#{@lower!}"
+	list = => html.ul [html.li link item for item in *@]
+	tree = html.html list
+		* "Foo"
+		* "Bar"
+		* "Baz"
 
-	print tostring tree
+	print tree
 
 A similar snippet in Lua:
 
@@ -84,7 +87,7 @@ A similar snippet in Lua:
 		tree = html.html(list{"Foo", "Bar", "Baz"})
 	end
 
-	print(tostring(tree))
+	print(tree)
 
 The resulting HTML, formatted a bit, should look something like this:
 
@@ -104,6 +107,6 @@ The resulting HTML, formatted a bit, should look something like this:
 
 [cosmo]: https://github.com/LuaDist/cosmo
 [etlua]: https://github.com/leafo/etlua
-[moonscript]: http://moonscript.org
+[yuescript]: http://yuescript.org
 [moonxml]: http://github.com/darkwiiplayer/moonxml
 [lustache]: https://github.com/Olivine-Labs/lustache
