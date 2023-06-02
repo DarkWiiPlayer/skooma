@@ -77,6 +77,9 @@ end
 -- @tparam string format Serialisation format of the new node (html, xml, etc.).
 -- Defaults to whatever is set in the environment, or 'xml' if nothing is set.
 function dom.node(name, format)
+	if type(name) ~= "string" then
+		error("Argument 1: expected string, got "..type(name))
+	end
 	return function(...)
 		local node = setmetatable({[NAME]=name, [FORMAT]=format}, dom.meta)
 		for i=1,select('#', ...) do
