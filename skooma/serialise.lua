@@ -56,6 +56,8 @@ local function serialise_tree(serialise_tag, escape, dom_node, buffer, ...)
 		end
 	elseif t=="function" then
 		return serialise_tree(serialise_tag, escape, dom_node(), buffer, ...)
+	elseif t=="nil" then
+		return buffer
 	else
 		table.insert(buffer, escape(tostring(dom_node)))
 	end
