@@ -1,1 +1,1 @@
-return require("skooma.env")("html")
+return require("skooma.env")("xml")
