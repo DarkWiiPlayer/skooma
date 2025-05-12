@@ -51,3 +51,7 @@ describe 'skooma', ->
 				assert.is.equal '<span class="foo bar baz"/>',
 					xml.span(class: {"foo", "bar", "baz"})!\concat!
 
+	it 'accepts custom serialiser functions', ->
+		custom = skooma.env (node) -> node[NAME]
+		doc = custom.node_name!
+		assert.equal "node_name", tostring(doc)

@@ -24,10 +24,22 @@ local FORMAT = dom.format
 
 --- Renders a dom node
 -- @tparam node node
+-- @param node Format name or custom serialiser function
 function dom.render(node, format)
-	local serialise = require 'skooma.serialise'
 	format = format or node[FORMAT] or 'xml'
-	return serialise[format](node)
+
+	if type(format) == "function" then
+		local result = format(node)
+
+		if type(result) == "table" then
+			return result
+		else
+			return {tostring(result)}
+		end
+	else
+		local serialise = require 'skooma.serialise'
+		return serialise[format](node)
+	end
 end
 
 dom.meta = {
