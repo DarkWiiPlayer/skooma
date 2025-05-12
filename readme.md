@@ -105,6 +105,20 @@ The resulting HTML, formatted a bit, should look something like this:
 		</ul>
 	</html>
 
+I want to output a different format
+----------------------------------------
+
+Instead of a named format like `"xml"` or `"html"` you can also pass in a custom
+serialise function during environment creation or while rendering an element.
+
+	local alwaysfoo = skooma.env(function(root) return "foo" end)
+	local root = alwaysfoo.h1(alwaysfoo.b("Bold title"))
+	print(root) -- Just prints "foo"
+
+Custom serialisers should return a sequence of strings. This is to avoid
+needless concatenations when streaming content. Any return value that isn't
+a table will be wrapped in one after being `tostring`d.
+
 [cosmo]: https://github.com/LuaDist/cosmo
 [etlua]: https://github.com/leafo/etlua
 [yuescript]: http://yuescript.org
